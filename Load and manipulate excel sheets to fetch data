@@ -1,0 +1,29 @@
+# load and combine multiple excel spreadsheets into one dataframe.
+# 1. Load the libraries 
+    library(tidyverse)  # Allows the map function according to the data in each spreadsheet
+    library(readxl)     # Allows to use excel_sheets
+    library(xls)        # Enable to use read.xls, which allows to specify more parameters to fetch the data in the spreadsheets
+
+# 2. A is used to store the data as dataframe.
+     # read.xlsx allows to use more specifity to fetch the data in the spreadsheet
+     # colIndex=5, allows to take the data of the fifth column
+     # header= TRUE, If in any of the spreadsheest exist a column with a different content, another column in that name is created in the dataframe
+     # . refers to take the result of excel_sheets as argument. Each excel spread sheet
+     
+     A <- excel_sheets("dataset.xlsx")%>%map_df(~read.xlsx("dataset.xlsx", colIndex=5, header= TRUE,.))
+
+# 3. Since just a column of data is going to be used, it is crucial to disregard all the NA rows in the dataset
+     # we can prove wheather there is NA values in the data
+     
+      sappply(A, function(x)any(is.na(x)))
+      
+      # We have some NA values. There are two posibilities to dismiss those NA values
+      delete.na <- function(df, n = 0){df[rowSums(is.na(df)) <=n,]}  # We can delete them  
+      delete.na(A)
+      
+      A <- na.omit(A)     # we can omit them
+      
+ # 4.  Once the dataset to be used is completely clean, we can perform some basic analysis
+         
+
+      
